@@ -3,10 +3,12 @@
 *.$$$
 *%
 *.bak
+*/CVS
+CVS/*
+generated/*
 *.gz
 */log
 *.log
 *.tar
 *.tgz
 *.zip
-generated/*
