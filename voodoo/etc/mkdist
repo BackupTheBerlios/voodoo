@@ -1,0 +1,5 @@
+#!/bin/sh
+date=$( date "+%Y-%m-%d" )
+pwd=$( pwd )
+name=${pwd##*/}
+tar -C .. -zcf ${name}-${date}.tar.gz ${name} -X etc/exclude.lst

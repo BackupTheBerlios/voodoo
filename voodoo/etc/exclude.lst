@@ -1,0 +1,12 @@
+*~
+*/.*
+*.$$$
+*%
+*.bak
+*.gz
+*/log
+*.log
+*.tar
+*.tgz
+*.zip
+generated/*

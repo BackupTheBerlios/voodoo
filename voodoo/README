@@ -1,0 +1,18 @@
+Written by Alexander Bartolich
+
+This is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free
+Software Foundation; either version 2 of the License, or (at your option)
+any later version. 
+
+Credits go to
+
+Paul Kranenburg, Branko Lankester, Rick Sladkey and Wichert Akkerman
+of strace fame for
+http://www.wi.leidenuniv.nl/~wichert/strace/
+
+Andries Brouwer for
+http://www.win.tue.nl/~aeb/linux/lk/lk-5.html#ss5.6
+
+Wojciech Purczynski for
+http://lists.netsys.com/pipermail/full-disclosure/2003-March/008897.html
