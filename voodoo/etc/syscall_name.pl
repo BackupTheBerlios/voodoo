@@ -1,10 +1,34 @@
 #!/usr/bin/perl -ws
 use strict;
+
+# From /usr/include/asm/unistd.h, on parisc-debian30r1
+#
+# /*
+#  *   HP-UX system calls get their native numbers for binary compatibility.
+#  */
+#
+#   #define __NR_HPUX_exit                    1
+# 
+# and down below we have
+#
+#   #define __NR_Linux                0
+#   #define __NR_syscall              (__NR_Linux + 0)
+#   #define __NR_exit                 (__NR_Linux + 1)
+#
+# Life sucks. Yeah.
+
 my @syscall;
 while(<>)
 {
-  next unless (m/^\s*#define\s+__NR_(\w+)\s+(\d+)/);
-  $syscall[$2] = $1;
+  if (m/^\s*#define\s+__NR_(\w+)\s+(\d+)/)
+  {
+    my ( $name, $number ) = ( $1, $2 );
+    $syscall[$number] = $name unless ($name =~ m/^HPUX_/);
+  }
+  elsif (m/^\s*#define\s+__NR_(\w+)\s+\(\s*__NR_Linux\s*\+\s*(\d+)\)/)
+  {
+    $syscall[$2] = $1;
+  }
 }
 
 my $ident = "const NAME syscall_name[]";

@@ -31,7 +31,13 @@
   #error Undefined hardware.
 #endif
 
-#define DEF_SYNCHRONIZE		"nanosleep,select,waitpid,wait4"
+#if defined(__hppa__)
+# define DEF_SELECT		"_newselect"
+#else
+# define DEF_SELECT		"select"
+#endif
+ 
+#define DEF_SYNCHRONIZE		"nanosleep," DEF_SELECT ",waitpid,wait4"
 
 static const char sz_opt[] = "dhp:s:tv";
 static const char sz_version[] = PACKAGE " " VERSION "\n";
