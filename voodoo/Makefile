@@ -8,7 +8,9 @@ _CFLAGS = -D PACKAGE=\"$(PACKAGE)\" \
 	-pipe -Wall -O2 $(CFLAGS) 
 
 all: default
-default: $(PACKAGE)
+default: mkdir $(PACKAGE)
+
+mkdir: ; mkdir generated
 
 # On sparc asm/unistd.h includes either asm-sparc/unistd.h or
 # asm-sparc64/unistd.h. These files are slightly different.
