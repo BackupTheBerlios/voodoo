@@ -1,5 +1,5 @@
 /*
- *      Copyright (c) 2003 Alexander Bartolich
+ *      Copyright (c) 2003-2004 Alexander Bartolich
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,38 +81,9 @@ one_process(pid_t pid, bool sync)
   if (msg_wait(SIGSTOP, pid))
   {
     msg_set_sysgood(pid);
-    /*
-     * we stopped the program in the middle of what it was doing
-     * continue it, and make it stop at the next syscall
-     */
-    #if 0
+    if (trace_syscall(pid, sync))
     {
-      voodoo_regs regs;
-printf("%s:%d\n", __FILE__, __LINE__);
-      if (-1 == msg_ptrace(pid, PTRACE_SYSCALL, 0, 0))
-        return;
-printf("%s:%d\n", __FILE__, __LINE__);
-      if (!msg_wait(SIGSTOP))
-        return;
-printf("%s:%d\n", __FILE__, __LINE__);
-      if (-1 == msg_ptrace(pid, PTRACE_GETREGS, 0, &regs))
-        return;
-printf("%s:%d\n", __FILE__, __LINE__);
-      dump_regs(&regs);
-printf("%s:%d\n", __FILE__, __LINE__);
-fflush(stdout);
-      ((void(*)())disasm_chdir)();
-printf("%s:%d\n", __FILE__, __LINE__);
-
-      msg_ptrace_cpy(pid, PTRACE_POKETEXT, (long*)disasm_chdir,
-        (long*)voodoo_regs_ip(&regs), sizeof(disasm_chdir)
-      );
-      if (-1 != msg_ptrace(pid, PTRACE_SYSCALL, 0, 0))
-      ;
     }
-  #else
-    trace_syscall(pid, sync);
-  #endif
   }
   msg_ptrace(pid, PTRACE_DETACH, 0, 0);
   return 0;
@@ -133,7 +104,7 @@ static pid_t
 read_target(const char* arg)
 {
   pid_t pid;
-#if defined(__alpha__)
+#if defined(SIZEOF_LONG_GT_PID)
   long l;
   if (!num_arg(arg, &l))
     return -1;
@@ -185,7 +156,7 @@ main(int argc, char**argv)
 	if (flags & FLG_TRACE)
 	  return do_trace(pid, false);
 	
-	else if (!set_synchronize(synchronize_arg))
+	if (!set_synchronize(synchronize_arg))
 	  return -1;
 	return one_process(pid, true);
     }

@@ -1,5 +1,5 @@
 /*
- *      Copyright (c) 2003 Alexander Bartolich
+ *      Copyright (c) 2003-2004 Alexander Bartolich
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -174,4 +174,3 @@ trace_syscall(pid_t pid, bool until_sync)
   }
   return true;
 }
-

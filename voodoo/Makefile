@@ -2,13 +2,17 @@ ARCH    = $(shell etc/getarch)
 PACKAGE	= voodoo
 VERSION = 0.1.0
 
-OBJS	= main.o msg.o signal.o trace.o
+OBJS	= \
+	$(ARCH)/main.o \
+	$(ARCH)/msg.o \
+	$(ARCH)/signal.o \
+	$(ARCH)/trace.o
 _CFLAGS = -D PACKAGE=\"$(PACKAGE)\" \
 	-D VERSION=\"$(VERSION)\" \
 	-pipe -Wall -O2 $(CFLAGS) 
 
-all: default
-default: mkdir $(PACKAGE)
+all: mkdir default
+default: mkdir $(ARCH)/$(PACKAGE)
 
 mkdir: ; test -d generated || mkdir generated
 
@@ -32,10 +36,10 @@ $(ARCH)/%.inc: $(ARCH)/%.o
 	| etc/disasm.pl -identifier=disasm_$* \
 	> $@
 
-%.o: src/%.c
+$(ARCH)/%.o: src/%.c
 	$(CC) -c $(_CFLAGS) -I . -o $@ $<
 
-$(PACKAGE): \
+$(ARCH)/$(PACKAGE): \
 	generated/syscall_name.inc \
 	generated/ptrace_name.inc \
 	$(ARCH)/chdir.inc \
@@ -55,4 +59,4 @@ clean:
 	| xargs -r rm
 
 dist: ; etc/mkdist
-ps: ; ps auwx | grep vmstat
+ps: ; ps ax | sed -ne 's/\([0-9][0-9]*\).*[0-9] vmstat.*/\1/p'

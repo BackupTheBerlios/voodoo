@@ -21,6 +21,10 @@
 # include <asm/ptrace.h> /* for PTRACE_O_TRACESYSGOOD */
 #endif
 
+#if defined(__alpha__)
+# define	SIZEOF_LONG_GT_PID
+#endif
+
 #include "generated/syscall_name.h"
 
 #define NR_ELEMS(a)	(sizeof(a) / sizeof(a[0]))
